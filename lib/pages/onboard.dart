@@ -1,7 +1,8 @@
+
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/pages/signup.dart';
 import 'package:food_app/pages/welcome_screen.dart';
 import 'package:lottie/lottie.dart';
 
@@ -15,38 +16,72 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   int _currentIndex = 0;
   final PageController _pageController = PageController();
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
+
+  @override
+  void dispose() {
+    _timer.cancel(); // Dispose of the timer
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  void _startTimer() {
+    const Duration duration = Duration(seconds: 4); // Change the duration as needed
+    _timer = Timer.periodic(duration, (_) {
+      _changePage();
+    });
+  }
+
+  void _changePage() {
+    final int nextPage = (_currentIndex + 1) % tabs.length;
+    _pageController.animateToPage(
+      nextPage,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.linear,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
-appBar: AppBar(
-  backgroundColor: Colors.white,
-  actions: [
-    Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 20, 0),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(backgroundColor: Colors.orangeAccent),
-          onPressed: (){Navigator.push(context, MaterialPageRoute(builder: (context)=>welcome()));}, child: Text("Next",style: TextStyle(color: Colors.white),)),
-    )
-  ],
-),
-      backgroundColor: Colors.black,
+      appBar: AppBar(
+        backgroundColor: Colors.white,
+        actions: [
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 20, 30, 0),
+            
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.redAccent,
+                shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => welcome()),
+                );
+              },
+              child: Text("Next", style: TextStyle(color: Colors.white)),
+            ),
+          )
+        ],
+      ),
+      backgroundColor: Colors.white,
       body: Stack(
         children: [
 
-          CustomPaint(
-            painter: ArcPainter(),
-            child: SizedBox(
-              height: screenSize.height / 1.4,
-              width: screenSize.width,
-            ),
-          ),
           Positioned(
-            top: 40,
+            top: 0,
             right: 5,
             left: 5,
-            child: Lottie.asset(
+            child: Image.asset(
               tabs[_currentIndex].lottieFile,
               key: Key('${Random().nextInt(999999999)}'),
               width: 600,
@@ -68,12 +103,12 @@ appBar: AppBar(
                         return Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            SizedBox(height: 70,),
+                            SizedBox(height: 70),
                             Text(
                               tab.title,
                               style: const TextStyle(
                                 fontSize: 27.0,
-                                color: Colors.white,
+                                color: Colors.black,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -82,7 +117,7 @@ appBar: AppBar(
                               tab.subtitle,
                               style: const TextStyle(
                                 fontSize: 17.0,
-                                color: Colors.white70,
+                                color: Colors.black,
                               ),
                               textAlign: TextAlign.center,
                             )
@@ -95,6 +130,7 @@ appBar: AppBar(
                       },
                     ),
                   ),
+
                   Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
@@ -102,66 +138,19 @@ appBar: AppBar(
                         _DotIndicator(isSelected: index == _currentIndex),
                     ],
                   ),
-                  const SizedBox(height: 75)
+SizedBox(height: 40,)
                 ],
               ),
             ),
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (_currentIndex == 2) {
-            _pageController.animateToPage(
-              0,
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.linear,
-            );
-          } else {
-            _pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.linear,
-            );
-          }
-        },
-        child: const Icon(CupertinoIcons.chevron_right, color: Colors.white),
-        backgroundColor: Colors.transparent,
-      ),
+
     );
   }
 }
 
-class ArcPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    Path orangeArc = Path()
-      ..moveTo(0, 0)
-      ..lineTo(0, size.height - 170)
-      ..quadraticBezierTo(
-          size.width / 2, size.height, size.width, size.height - 170)
-      ..lineTo(size.width, size.height)
-      ..lineTo(size.width, 0)
-      ..close();
 
-    canvas.drawPath(orangeArc, Paint()..color = Colors.orange);
-
-    Path whiteArc = Path()
-      ..moveTo(0.0, 0.0)
-      ..lineTo(0.0, size.height - 185)
-      ..quadraticBezierTo(
-          size.width / 2, size.height - 70, size.width, size.height - 185)
-      ..lineTo(size.width, size.height)
-      ..lineTo(size.width, 0)
-      ..close();
-
-    canvas.drawPath(whiteArc, Paint()..color = Colors.white);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
-  }
-}
 
 class _DotIndicator extends StatelessWidget {
   final bool isSelected;
@@ -175,10 +164,11 @@ class _DotIndicator extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         height: 6.0,
-        width: 6.0,
+        width: isSelected ?50:13,
         decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: isSelected ? Colors.white : Colors.white38,
+          borderRadius: BorderRadius.circular(10),
+          shape: BoxShape.rectangle,
+          color: isSelected ? Colors.redAccent : Colors.red[200],
         ),
       ),
     );
@@ -195,18 +185,39 @@ class OnboardingModel {
 
 List<OnboardingModel> tabs = [
   OnboardingModel(
-    'assets/delivery.json',
+    'assets/screen1.gif',
     'Choose A Tasty',
-    'When you order Eat Street , \nwe\'ll hook you up with exclusive \ncoupons.',
+    'When you order Eat Street, \nwe\'ll hook you up with exclusive \ncoupons.',
   ),
   OnboardingModel(
-    'assets/interaction.json',
+    'assets/screen2.gif',
     'Discover Places',
     'We make it simple to find the \nfood you crave. Enter your \naddress and let',
   ),
   OnboardingModel(
-      'assets/order.json',
-      'Pick Up Or',
-      'We make food ordering fast ,\n simple and free - no matter if you \norder',
+    'assets/screen3.gif',
+    'Pick Up Or',
+    'We make food ordering fast, \nsimple, and free - no matter if you \norder',
   ),
 ];
+
+
+// floatingActionButton: FloatingActionButton(
+// onPressed: () {
+// if (_currentIndex == 2) {
+// _pageController.animateToPage(
+// 0,
+// duration: const Duration(milliseconds: 300),
+// curve: Curves.linear,
+// );
+// } else {
+// _pageController.nextPage(
+// duration: const Duration(milliseconds: 300),
+// curve: Curves.linear,
+// );
+// }
+// },
+// child: const Icon(CupertinoIcons.chevron_right, color: Colors.white),
+// backgroundColor: Colors.transparent,
+// ),
+

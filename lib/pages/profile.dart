@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../authentication_repository/authentication_repository.dart';
+
 class Profile extends StatefulWidget {
   const Profile({super.key});
 
@@ -187,33 +189,38 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   SizedBox(height: 30.0,),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(10.0),
-                      elevation: 2.0,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                          horizontal: 10.0,
-          
+                  GestureDetector(
+                    onTap: (){
+                      AuthentiactionRepository.instance.logout();
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(horizontal: 20.0),
+                      child: Material(
+                        borderRadius: BorderRadius.circular(10.0),
+                        elevation: 2.0,
+                        child: Container(
+                          padding: EdgeInsets.symmetric(
+                            vertical: 15.0,
+                            horizontal: 10.0,
+
+                          ),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+
+                          ),
+                          child: Row(
+                            children: [
+                              Icon(Icons.delete,color: Colors.black,),
+                              SizedBox(width: 20.0,),
+                              Text("Logout",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),),
+
+
+                            ],
+                          ),
                         ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-          
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.delete,color: Colors.black,),
-                            SizedBox(width: 20.0,),
-                            Text("Delete Account",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),),
-          
-          
-                          ],
-                        ),
+
                       ),
-          
                     ),
                   ),
                   SizedBox(height: 30.0,),

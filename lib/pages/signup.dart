@@ -1,7 +1,10 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 
+import '../controller/sign_up_controller.dart';
 import '../widget/support_widget.dart';
 import 'bottomnav.dart';
 import 'login.dart';
@@ -14,36 +17,9 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
-  String email="";
-  String password="";
-  String name="";
-  TextEditingController  Emialcontorller= new TextEditingController();
-  TextEditingController  Namecontorller= new TextEditingController();
-  TextEditingController  Passwordcontorller= new TextEditingController();
+  final controller = Get.put(SignUpController());
   final _formkey=GlobalKey<FormState>();
-  registration()async{
-    if(password!=null){
-      try{
-        UserCredential userCredential=await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Registration Successful",style: TextStyle(
-          fontSize: 20,
-        ),)));
-        Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>BottomNav()));
-      }on FirebaseAuthException catch(e){
-        if(e.code=="weak-password"){
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Password Provided is too weak",style: TextStyle(
-            fontSize: 20,
-          ),)));
-        }
-        else if(e.code=="email-already-in-use"){
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Account already exist",style: TextStyle(
-            fontSize: 20,
-          ),)));
-        }
 
-      }
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -75,7 +51,7 @@ class _SignUpState extends State<SignUp> {
                       padding: const EdgeInsets.only(right: 10, left: 10),
                       child: Column(
                         children: [
-                          SizedBox(height: 160,),
+                          SizedBox(height: 150,),
                           Center(
                               child: Container(
                                 decoration: BoxDecoration(
@@ -83,7 +59,7 @@ class _SignUpState extends State<SignUp> {
                                 ),
                                 child: Image(
                                   image: AssetImage('images/desipharata.png',),
-                                  height: 120,
+                                  height: 130,
                                 ),
                               )),
                           Container(
@@ -99,7 +75,7 @@ class _SignUpState extends State<SignUp> {
                                   SizedBox(
                                     height: 50,
                                     child: TextFormField(
-                                      controller: Namecontorller,
+                                      controller: controller.fullname,
                                       validator: (value){
                                         if(value==null||value.isEmpty){
                                           return "please enter name";
@@ -118,7 +94,7 @@ class _SignUpState extends State<SignUp> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        prefixIcon: Icon(Icons.person),
+                                        prefixIcon: Icon(Icons.person_outline_rounded),
                                       ),
                                     ),
                                   ),
@@ -128,7 +104,7 @@ class _SignUpState extends State<SignUp> {
                                   SizedBox(
                                     height: 50,
                                     child: TextFormField(
-                                      controller: Emialcontorller,
+                                      controller: controller.email,
                                       validator: (value){
                                         if(value==null||value.isEmpty){
                                           return "please enter E-mail";
@@ -139,7 +115,7 @@ class _SignUpState extends State<SignUp> {
                                         focusedBorder: OutlineInputBorder(
                                             borderRadius: BorderRadius.circular(20),
                                             borderSide:BorderSide(color: Colors.deepOrangeAccent)),
-                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
+                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(15)),
                                         label: Text(
                                           'Email',
                                           style: TextStyle(
@@ -147,7 +123,7 @@ class _SignUpState extends State<SignUp> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        prefixIcon: Icon(Icons.mail),
+                                        prefixIcon: Icon(Icons.email_outlined),
                                       ),
                                     ),
                                   ),
@@ -158,7 +134,7 @@ class _SignUpState extends State<SignUp> {
                                     height: 50,
                                     child: TextFormField(
 
-                                      controller: Passwordcontorller,
+                                      controller: controller.password,
                                       validator: (value){
                                         if(value==null||value.isEmpty){
                                           return "please enter Password";
@@ -179,7 +155,7 @@ class _SignUpState extends State<SignUp> {
                                             fontWeight: FontWeight.bold,
                                           ),
                                         ),
-                                        prefixIcon: Icon(Icons.password_outlined),
+                                        prefixIcon: Icon(Icons.fingerprint_outlined),
                                       ),
                                     ),
                                   ),
@@ -187,15 +163,10 @@ class _SignUpState extends State<SignUp> {
                                     height: 20,
                                   ),
                                   GestureDetector(
-                                    onTap: ()async{
+                                    onTap: (){
                                       if(_formkey.currentState!.validate()){
-                                        setState(() {
-                                          email=Emialcontorller.text;
-                                          name=Namecontorller.text;
-                                          password=Passwordcontorller.text;
-                                        });
+                                        SignUpController.instance.registerUser(controller.email.text.trim(), controller.password.text.trim(),controller.fullname.text);
                                       }
-                                      registration();
                                     },
                                     child: Material(
                                       elevation: 5.0,
@@ -235,12 +206,25 @@ class _SignUpState extends State<SignUp> {
                                     MaterialPageRoute(
                                         builder: (context) => LogIn()));
                               },
-                              child: Text(
-                                "Already have have a account ?Login",
-                                style:TextStyle(
-                                  fontSize:18,
-                                  fontWeight: FontWeight.bold
-                                ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Already have have a account ?",
+                                    style:TextStyle(
+                                      fontSize:18,
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                  Text(
+                                    " Login",
+                                    style:TextStyle(
+                                      color: Colors.deepOrange,
+                                        fontSize:18,
+                                        fontWeight: FontWeight.bold
+                                    ),
+                                  ),
+                                ],
                               ))
                         ],
                       ),

@@ -4,9 +4,12 @@ import 'package:flutter/material.dart';
 import 'package:food_app/pages/bottomnav.dart';
 import 'package:food_app/pages/onboard.dart';
 import 'package:food_app/pages/signup.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 
+import 'authentication_repository/authentication_repository.dart';
 import 'firebase_options.dart';
 
 
@@ -14,9 +17,7 @@ Future<void> main() async{
 
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform).then((value) => Get.put(AuthentiactionRepository()));
   runApp(const MyApp());
 }
 

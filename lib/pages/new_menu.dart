@@ -1,117 +1,125 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'cart.dart';
 import 'order.dart';
 
-class MenuItem {
+class Menuitem {
   final String name;
   final String image;
 
-  MenuItem({required this.name, required this.image});
+  Menuitem({required this.name, required this.image});
 }
 
-class MenuPage extends StatefulWidget {
+class Menupage extends StatefulWidget {
   @override
-  _MenuPageState createState() => _MenuPageState();
+  _MenupageState createState() => _MenupageState();
 }
 
-class _MenuPageState extends State<MenuPage> {
-  Map<String, List<MenuItem>> menuItems = {
+class _MenupageState extends State<Menupage> {
+  Map<String, List<Menuitem>> menuItems = {
     'Breakfast': [
-      MenuItem(name: 'Idly 2pcs',
+      Menuitem(name: 'Idly 2pcs',
           image: 'https://s3.ap-south-1.amazonaws.com/shopnowchat.com/Medium/MPRzocJOpYyWy_Idly2Pcs.jpg'),
-      MenuItem(name: 'Vada',
+      Menuitem(name: 'Vada',
           image: 'https://farm1.staticflickr.com/320/18912568232_686613c78c_o.jpg'),
-      MenuItem(name: 'Kharabath',
+      Menuitem(name: 'Kharabath',
           image: 'https://thephotowali.files.wordpress.com/2019/08/img201908161053451336713087275706865.jpg'),
-      MenuItem(name: 'Kesaribath',
+      Menuitem(name: 'Kesaribath',
           image: 'https://www.ticklingpalates.com/wp-content/uploads/2022/09/rava-kesari-recipe.jpg'),
-      MenuItem(name: 'Rice Bath',
+      Menuitem(name: 'Rice Bath',
           image: 'https://smithakalluraya.com/wp-content/uploads/2014/10/image.1024x1024-43.jpg'),
-      MenuItem(name: 'Any Dosa\'s',
+      Menuitem(name: 'Any Dosa\'s',
           image: 'https://www.indianhealthyrecipes.com/wp-content/uploads/2023/06/brown-rice-dosa-recipe.jpg'),
-      MenuItem(name: 'Stuffed Parathas',
+      Menuitem(name: 'Stuffed Parathas',
           image: 'https://simmertoslimmer.com/wp-content/uploads/2022/11/Onion-paratha.jpg'),
-      MenuItem(name: 'Chapathi/Phulkha',
+      Menuitem(name: 'Chapathi/Phulkha',
           image: 'https://www.krumpli.co.uk/wp-content/uploads/2023/05/Homemade-Indian-Chapati-02-735x735.jpg'),
-      MenuItem(name: 'Plain Parathas',
+      Menuitem(name: 'Plain Parathas',
           image: 'https://indianvegrecipe.com/wp-content/uploads/2019/10/paratha-recipe-2.jpg'),
-      MenuItem(name: 'gravy\'s',
+      Menuitem(name: 'gravy\'s',
           image: 'https://i.ytimg.com/vi/uCDcZMygqdg/maxresdefault.jpg'),
     ],
     'Lunch': [
-      MenuItem(name: 'Rice',
+      Menuitem(name: 'Rice',
           image: 'https://www.vegrecipesofindia.com/wp-content/uploads/2022/06/how-to-cook-basmati-rice-2.jpg'),
-      MenuItem(name: 'Sambar',
+      Menuitem(name: 'Sambar',
           image: 'https://www.cubesnjuliennes.com/wp-content/uploads/2021/01/South-Indian-Sambar-Recipe.jpg'),
-      MenuItem(name: 'Rasam',
+      Menuitem(name: 'Rasam',
           image: 'https://www.myhealthybreakfast.in/images/images-drink-2022/chana-rasam.jpg'),
-      MenuItem(name: 'Vegetable Curry',
+      Menuitem(name: 'Vegetable Curry',
           image: 'https://greenbowl2soul.com/wp-content/uploads/2021/06/Indian-vegetable-curry.jpg'),
-      MenuItem(name: 'Rice Bath',
+      Menuitem(name: 'Rice Bath',
           image: 'https://smithakalluraya.com/wp-content/uploads/2014/10/image.1024x1024-43.jpg'),
-      MenuItem(name: 'CurdRice',
+      Menuitem(name: 'CurdRice',
           image: 'https://www.vegrecipesofindia.com/wp-content/uploads/2016/07/curd-rice-2-500x500.jpg'),
-      MenuItem(name: 'Stuffed Parathas',
+      Menuitem(name: 'Stuffed Parathas',
           image: 'https://simmertoslimmer.com/wp-content/uploads/2022/11/Onion-paratha.jpg'),
-      MenuItem(name: 'Chapathi/Phulkha',
+      Menuitem(name: 'Chapathi/Phulkha',
           image: 'https://www.krumpli.co.uk/wp-content/uploads/2023/05/Homemade-Indian-Chapati-02-735x735.jpg'),
-      MenuItem(name: 'Plain Parathas',
+      Menuitem(name: 'Plain Parathas',
           image: 'https://indianvegrecipe.com/wp-content/uploads/2019/10/paratha-recipe-2.jpg'),
-      MenuItem(name: 'Indian gravy\'s',
+      Menuitem(name: 'Indian gravy\'s',
           image: 'https://i.ytimg.com/vi/uCDcZMygqdg/maxresdefault.jpg'),
     ],
     'Dinner': [
-      MenuItem(name: 'phulkha(3pcs) with curry',
+      Menuitem(name: 'phulkha(3pcs) with curry',
           image: 'https://as2.ftcdn.net/v2/jpg/01/15/45/43/1000_F_115454319_6SlLY58SwqRdx4o8vqvTHA9nTJ5l6ss2.jpg'),
-      MenuItem(name: 'Any RiceBath',
+      Menuitem(name: 'Any RiceBath',
           image: 'https://smithakalluraya.com/wp-content/uploads/2014/10/image.1024x1024-43.jpg'),
-      MenuItem(name: 'Pizza Parathas',
+      Menuitem(name: 'Pizza Parathas',
           image: 'https://i.ytimg.com/vi/-JKtWOqARa4/maxresdefault.jpg'),
-      MenuItem(name: 'Stuffed Parathas',
+      Menuitem(name: 'Stuffed Parathas',
           image: 'https://simmertoslimmer.com/wp-content/uploads/2022/11/Onion-paratha.jpg'),
-      MenuItem(name: 'Chapathi(3pcs) with Curry',
+      Menuitem(name: 'Chapathi(3pcs) with Curry',
           image: 'https://www.shutterstock.com/image-photo/vegetarian-indian-thali-home-food-600nw-1939889272.jpg'),
-      MenuItem(name: 'Indian Tacos',
+      Menuitem(name: 'Indian Tacos',
           image: 'https://keviniscooking.com/wp-content/uploads/2022/08/Navajo-Tacos-Indian-Fry-Bread-square-1000x1000.jpg'),
-      MenuItem(name: 'Indian gravy\'s',
+      Menuitem(name: 'Indian gravy\'s',
           image: 'https://i.ytimg.com/vi/uCDcZMygqdg/maxresdefault.jpg'),
     ],
   };
 
   String currentMenu = '';
 
-  List<MenuItem> cartItems = [];
+  List<Menuitem> cartItems = [];
 
   @override
   void initState() {
     super.initState();
-    currentMenu = getMenuBasedOnTime();
+    currentMenu = 'Breakfast'; // Show breakfast menu by default
   }
 
-  String getMenuBasedOnTime() {
-    var currentTime = DateTime
-        .now()
-        .hour;
-    if (currentTime >= 5 && currentTime < 12) {
-      return 'Breakfast';
-    } else if (currentTime >= 12 && currentTime < 17) {
-      return 'Lunch';
-    } else {
-      return 'Dinner';
-    }
-  }
-
-  void addToCart(MenuItem item) {
+  void changeMenu(String menu) {
     setState(() {
-      cartItems.add(item);
+      currentMenu = menu;
     });
   }
 
+  void addToCart(Menuitem item) {
+    setState(() {
+      if (cartItems.length >= 2) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Reached Maximum Limit'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      } else {
+        cartItems.add(item);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('${item.name} added to cart'),
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    List<MenuItem> items = menuItems[currentMenu] ?? [];
+    List<Menuitem> items = menuItems[currentMenu] ?? [];
 
     return SafeArea(
       child: Scaffold(
@@ -129,7 +137,7 @@ class _MenuPageState extends State<MenuPage> {
               child: Text(
                 'Today\'s Menu',
                 style: TextStyle(
-                  fontSize: 28, // Adjust the font size as needed
+                  fontSize: 28,
                   fontWeight: FontWeight.bold,
                   color: Colors.white,
                 ),
@@ -143,6 +151,24 @@ class _MenuPageState extends State<MenuPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => changeMenu('Breakfast'),
+                      child: Text('Breakfast'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => changeMenu('Lunch'),
+                      child: Text('Lunch'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => changeMenu('Dinner'),
+                      child: Text('Dinner'),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
@@ -166,31 +192,13 @@ class _MenuPageState extends State<MenuPage> {
                         ),
                         trailing: IconButton(
                           icon: Icon(Icons.add),
-                          onPressed: () {
-                            if(cartItems.length>=2){
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('Reached Maximum Limit'),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            }
-                            else{
-                              addToCart(item);
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text('${item.name} added to cart'),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            }
-                            },
+                          onPressed: () => addToCart(item),
                         ),
                       ),
                     );
                   }).toList(),
                 ),
-                SizedBox(height: 55,),
+                SizedBox(height: 55),
               ],
             ),
           ),
@@ -200,7 +208,8 @@ class _MenuPageState extends State<MenuPage> {
             Navigator.of(context).push(
               PageRouteBuilder(
                 transitionDuration: Duration(milliseconds: 500),
-                pageBuilder: (context, animation, secondaryAnimation) => CartPage( cartItems:cartItems),
+                pageBuilder: (context, animation, secondaryAnimation) =>
+                    Cartpage(cartitems: cartItems),
                 transitionsBuilder: (context, animation, secondaryAnimation, child) {
                   var begin = Offset(1.0, 0.0);
                   var end = Offset.zero;

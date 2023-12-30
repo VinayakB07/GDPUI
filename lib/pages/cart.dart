@@ -2,17 +2,16 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../service/auth.dart';
-import 'home.dart';
-import 'package:intl/intl.dart';
+import 'new_menu.dart';
 
 
-class CartPage extends StatefulWidget {
-  late final List<MenuItem> cartItems;
+class Cartpage extends StatefulWidget {
+  final List<Menuitem> cartitems;
 
-  CartPage({required this.cartItems});
+  Cartpage({required this.cartitems});
 
   @override
-  _CartPageState createState() => _CartPageState();
+  _CartpageState createState() => _CartpageState();
 }
 class UserDetails {
   final String userId;
@@ -30,11 +29,11 @@ Future<UserDetails> createUsserDetail() async{
   AuthService authService = AuthService();
   User? currentUser = await authService.getCurrentUser();
   UserDetails userDetails=UserDetails(userId: currentUser!.uid, name: currentUser?.displayName, email: currentUser?.email);
-  return userDetails;
+return userDetails;
 }
-DateTime now = DateTime.now();
-String formattedTime = DateFormat('HH:mm:ss').format(now);
-Future<void> placeOrderToFirebase(UserDetails userDetails,List<MenuItem> cartitems) async {
+
+
+Future<void> placeOrderToFirebase(UserDetails userDetails,List<Menuitem> cartitems) async {
   CollectionReference userOrders = FirebaseFirestore.instance.collection('users/${userDetails.userId}/orders');
 
   await userOrders.add({
@@ -48,19 +47,11 @@ Future<void> placeOrderToFirebase(UserDetails userDetails,List<MenuItem> cartite
       'image': item.image,
       // Add other order item details here
     }).toList(),
-    'timestamp': formattedTime,
+    'timestamp': DateTime.now(),
     // Additional order information can be added here
   });
 }
-class _CartPageState extends State<CartPage> {
-  void _showOrderPlacedSnackBar() {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Order placed'),
-        duration: Duration(seconds: 2),
-      ),
-    );
-  }
+class _CartpageState extends State<Cartpage> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -92,14 +83,14 @@ class _CartPageState extends State<CartPage> {
         body: Column(
           children: [
             Expanded(
-              child: widget.cartItems.isEmpty
+              child: widget.cartitems.isEmpty
                   ? Center(
                 child: Text('Cart is empty'),
               )
                   : ListView.builder(
-                itemCount: widget.cartItems.length,
+                itemCount: widget.cartitems.length,
                 itemBuilder: (context, index) {
-                  MenuItem item = widget.cartItems[index];
+                  Menuitem item = widget.cartitems[index];
                   return Dismissible(
                     key: Key(item.name),
                     direction: DismissDirection.endToStart,
@@ -141,32 +132,25 @@ class _CartPageState extends State<CartPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
               child: GestureDetector(
-                onTap: () async {
-                  UserDetails userDetails = await createUsserDetail();
-                  if (userDetails != null) {
-                    await placeOrderToFirebase(userDetails, widget.cartItems);
-                    _showOrderPlacedSnackBar();
-                    _clearCart();
-                  } else {
-                    print("User not defined");
-                  }
+                onTap: (){
+placeOrderToFirebase(createUsserDetail() as UserDetails, widget.cartitems);
                 },
                 child: SizedBox(
                   width: double.infinity,
                   child:  Container(
                     height: 40,
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(
-                        colors: [Colors.orange, Colors.deepOrange],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
+                        gradient: LinearGradient(
+                          colors: [Colors.orange, Colors.deepOrange],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
 
-                      ),
-                      borderRadius:BorderRadius.circular(20)
+                        ),
+                        borderRadius:BorderRadius.circular(20)
                     ),
                     child: Center(
                       child: Text(
-                        'Place Order',
+                        'Checkout',
                         style: TextStyle(
                           fontSize: 20, // Adjust the font size as needed
                           fontWeight: FontWeight.bold,
@@ -186,7 +170,7 @@ class _CartPageState extends State<CartPage> {
 
   void _removeFromCart(int index) {
     setState(() {
-      widget.cartItems.removeAt(index);
+      widget.cartitems.removeAt(index);
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -195,10 +179,4 @@ class _CartPageState extends State<CartPage> {
       ),
     );
   }
-  void _clearCart() {
-    setState(() {
-      widget.cartItems.clear();
-    });
-  }
 }
-
