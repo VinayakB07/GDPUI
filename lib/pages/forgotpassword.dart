@@ -2,6 +2,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_app/pages/signup.dart';
+import 'package:get/get.dart';
 
 
 
@@ -146,10 +147,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => SignUp()));
+                                 Get.offAll(SignUp(),transition: Transition.zoom,duration: Duration(milliseconds: 600));
                                 },
                                 child: Text(
                                   "Create",

@@ -1,262 +1,176 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:food_app/authentication_repository/authentication_repository.dart';
 
-import '../authentication_repository/authentication_repository.dart';
 
-class Profile extends StatefulWidget {
-  const Profile({super.key});
-
+class ProfilePage extends StatefulWidget {
   @override
-  State<Profile> createState() => _ProfileState();
+  _ProfilePageState createState() => _ProfilePageState();
 }
 
-class _ProfileState extends State<Profile> {
+class _ProfilePageState extends State<ProfilePage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  User? _user;
+
+  @override
+  void initState() {
+    super.initState();
+    _getUserDetails();
+  }
+  String? _userPhoneNumber;
+  String? _userlocation;
+  Future<void> _getUserDetails() async {
+    _user = _auth.currentUser;
+    if (_user != null) {
+      DocumentSnapshot userDoc = await _firestore.collection('UserDetail').doc(_user!.uid).get();
+      if (userDoc.exists) {
+        setState(() {
+          _userPhoneNumber = userDoc.get('phoneNumber');
+          _userlocation = userDoc.get('location');
+        });
+      }
+    }
+    setState(() {}); // Update the UI after obtaining the user details
+  }
+  Future<void> _updateLocation(String newLocation) async {
+    try {
+      _user = _auth.currentUser;
+      if (_user != null) {
+        await _firestore.collection('UserDetail').doc(_user!.uid).update({
+          'location': newLocation,
+        });
+        setState(() {
+          _userlocation = newLocation;
+        });
+      }
+    } catch (e) {
+      print('Error updating location: $e');
+      // Handle update failure
+    }
+  }
+  Future<void> _editLocation(BuildContext context) async {
+    String newLocation = ''; // Initialize with current location or empty string
+
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Edit Location'),
+          content: TextFormField(
+            onChanged: (value) {
+              newLocation = value;
+            },
+            decoration: InputDecoration(
+              hintText: 'Enter new location',
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () async {
+                // Update the location in Firestore and refresh UI
+                await _updateLocation(newLocation);
+                Navigator.pop(context);
+              },
+              child: Text('Save'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SingleChildScrollView(
-          child: Container(
-              child: Column(
+      appBar: AppBar(
+        title: Text('Profile'),
+      ),
+      body: Padding(
+        padding: EdgeInsets.all(20.0),
+        child: _user != null
+            ? SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Stack(
+                alignment: Alignment.bottomRight,
                 children: [
-                  Stack(
-                    children: [
-                      Container(
-                        padding: EdgeInsets.only(top: 45.0,left: 20.0, right: 20.0),
-                        height: MediaQuery.of(context).size.height/4.3,
-                        width: MediaQuery.of(context).size.width,
-                        decoration: BoxDecoration(
-                            color: Colors.black,
-                            borderRadius: BorderRadius.vertical(
-                              bottom: Radius.elliptical(MediaQuery.of(context).size.width, 105.0),
-                            )
-                        ),
-                      ),
-                      Center(
-                        child: Container(
-                          margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/6.5),
-                          child: Material(
-                              elevation: 10.0,
-                              borderRadius: BorderRadius.circular(60),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(60),
-                                child: Image.network("https://wallpaperaccess.com/full/8185483.jpg",height: 120,width: 120,fit: BoxFit.cover,),
-                              )
-                          ),
-                        ),
-                      ),
-                      Center(
-                        child: Padding(padding: EdgeInsets.only(top: 70.0),child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Kate Winsilate",style: TextStyle(color: Colors.white,fontSize: 25.0,fontWeight: FontWeight.bold),)
-                          ],
-                        ),),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 30.0,),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(10.0),
-                      elevation: 2.0,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                          horizontal: 10.0,
-          
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-          
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.person,color: Colors.black,),
-                            SizedBox(width: 20.0,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Name",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),),
-                                Text("Kate Winsilate",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),)
-          
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-          
-                    ),
-                  ),
-                  SizedBox(height: 30.0,),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(10.0),
-                      elevation: 2.0,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                          horizontal: 10.0,
-          
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-          
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.email,color: Colors.black,),
-                            SizedBox(width: 20.0,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Email",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),),
-                                Text("katewinsilate0562@gmail.com",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),)
-          
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-          
-                    ),
-                  ),
-                  SizedBox(height: 30.0,),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(10.0),
-                      elevation: 2.0,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                          horizontal: 10.0,
-          
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-          
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.description,color: Colors.black,),
-                            SizedBox(width: 20.0,),
-                            Text("Terms & Conditions",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),)
-          
-          
-                          ],
-                        ),
-                      ),
-          
-                    ),
-                  ),
-                  SizedBox(height: 30.0,),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(10.0),
-                      elevation: 2.0,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                          horizontal: 10.0,
-          
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-          
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.call,color: Colors.black,),
-                            SizedBox(width: 20.0,),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Mobile Number",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),),
-                                Text("9000123876",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),)
-          
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-          
-                    ),
-                  ),
-                  SizedBox(height: 30.0,),
-                  GestureDetector(
-                    onTap: (){
-                      AuthentiactionRepository.instance.logout();
-                    },
-                    child: Container(
-                      margin: EdgeInsets.symmetric(horizontal: 20.0),
-                      child: Material(
-                        borderRadius: BorderRadius.circular(10.0),
-                        elevation: 2.0,
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 15.0,
-                            horizontal: 10.0,
 
-                          ),
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(Icons.delete,color: Colors.black,),
-                              SizedBox(width: 20.0,),
-                              Text("Logout",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),),
-
-
-                            ],
-                          ),
-                        ),
-
-                      ),
+                  Center(
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _user!.photoURL != null
+                          ? NetworkImage(_user!.photoURL!)
+                          : AssetImage('images/prof.png') as ImageProvider,
                     ),
                   ),
-                  SizedBox(height: 30.0,),
-                  Container(
-                    margin: EdgeInsets.symmetric(horizontal: 20.0),
-                    child: Material(
-                      borderRadius: BorderRadius.circular(10.0),
-                      elevation: 2.0,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                          vertical: 15.0,
-                          horizontal: 10.0,
-          
-                        ),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10),
-          
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(Icons.logout,color: Colors.black,),
-                            SizedBox(width: 20.0,),
-                            Text("LogOut",style: TextStyle(color: Colors.black,fontWeight: FontWeight.bold,fontSize: 16.0,),)
-          
-          
-                          ],
-                        ),
-                      ),
-          
-                    ),
-                  )
+
                 ],
               ),
-            ),
-        ),
-        );
-    }
+              SizedBox(height: 20),
+              Text(
+                '${_user!.displayName ?? 'No name'}',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 10.0),
+              Text(
+                '${_user!.email ?? 'No email'}',
+                style: TextStyle(fontSize: 18.0),
+              ),
+              SizedBox(height: 20),
+              Divider(
+                color: Colors.grey,
+                height: 30,
+                thickness: 1,
+              ),
+
+                ListTile(
+                  leading: Icon(Icons.phone),
+                  title: Text('Phone Number'),
+                  subtitle: Text('${_userPhoneNumber ?? 'No phone number'}'),
+                  
+                ),
+              ListTile(
+                leading: Icon(Icons.location_on),
+                title: Text('Location'),
+                subtitle: Text('${_userlocation?? 'Not Set'}'),
+                trailing: IconButton(
+                  icon: Icon(Icons.edit),
+                  onPressed: () {
+                   _editLocation(context);
+                  },
+                ),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  AuthentiactionRepository.instance.logout();
+                },
+                child: Text("Logout"),
+                style: ElevatedButton.styleFrom(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 40,
+                    vertical: 15,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        )
+            : Center(child: CircularProgressIndicator()), // Show loader while fetching user details
+      ),
+    );
+  }
 }

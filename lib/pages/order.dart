@@ -2,8 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../service/auth.dart';
-import 'home.dart';
+
 import 'package:intl/intl.dart';
+
+import 'new_menu.dart';
 
 
 class CartPage extends StatefulWidget {
@@ -33,7 +35,7 @@ Future<UserDetails> createUsserDetail() async{
   return userDetails;
 }
 DateTime now = DateTime.now();
-String formattedTime = DateFormat('HH:mm:ss').format(now);
+String formattedDate = DateFormat('yyyy-MM-dd HH:mm:ss').format(now);
 Future<void> placeOrderToFirebase(UserDetails userDetails,List<MenuItem> cartitems) async {
   CollectionReference userOrders = FirebaseFirestore.instance.collection('users/${userDetails.userId}/orders');
 
@@ -48,7 +50,7 @@ Future<void> placeOrderToFirebase(UserDetails userDetails,List<MenuItem> cartite
       'image': item.image,
       // Add other order item details here
     }).toList(),
-    'timestamp': formattedTime,
+    'timestamp': formattedDate,
     // Additional order information can be added here
   });
 }

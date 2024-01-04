@@ -1,15 +1,12 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:food_app/pages/admin.dart';
 import 'package:food_app/pages/signup.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../controller/sign_up_controller.dart';
 import '../widget/support_widget.dart';
 import 'forgotpassword.dart';
-
-
 
 class LogIn extends StatefulWidget {
   const LogIn({super.key});
@@ -20,12 +17,14 @@ class LogIn extends StatefulWidget {
 
 class _LogInState extends State<LogIn> {
   final controller = Get.put(SignUpController());
-  final _formkey=GlobalKey<FormState>();
-
+  final _formkey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
+    var height = MediaQuery.of(context).size.height;
     return Scaffold(
+
+
       body: Container(
         child: SingleChildScrollView(
           child: Column(
@@ -34,17 +33,16 @@ class _LogInState extends State<LogIn> {
                 children: [
                   Container(
                     width: MediaQuery.of(context).size.width,
-                    height: MediaQuery.of(context).size.height / 2.5,
+                    height: height / 3,
                     decoration: BoxDecoration(
-                        image: DecorationImage(image: NetworkImage("https://img.freepik.com/premium-photo/table-full-food-including-rice-curry-plate-food_900958-7307.jpg?w=1380"))
-                    ),
+                        image: DecorationImage(
+                            fit: BoxFit.fitWidth,
+                            image: AssetImage("images/food.png"))),
                   ),
                   Container(
-                    margin: EdgeInsets.only(
-                        top: MediaQuery.of(context).size.height / 3),
-                    height: MediaQuery.of(context).size.height,
+                    margin: EdgeInsets.only(top: height / 3),
+                    height: height,
                     width: MediaQuery.of(context).size.width,
-
                     child: Text(''),
                   ),
                   Container(
@@ -53,19 +51,55 @@ class _LogInState extends State<LogIn> {
                       padding: const EdgeInsets.only(right: 10, left: 10),
                       child: Column(
                         children: [
-                          SizedBox(height: 150,),
+                          SizedBox(
+                            height: height * 0.19,
+                          ),
                           Center(
                               child: Container(
-                                decoration: BoxDecoration(
-                                    boxShadow: [BoxShadow(blurRadius: 1)]
-                                ),
-                                child: Image(
-                                  image: AssetImage('images/desipharata.png',),
-                                  height: 130,
-                                ),
-                              )),
+                            decoration: BoxDecoration(boxShadow: [
+                              BoxShadow(blurRadius: 1, spreadRadius: 1)
+                            ]),
+                            child: Image(
+                              image: AssetImage(
+                                'images/desipharata.png',
+                              ),
+                              height: height * 0.2,
+                            ),
+                          )),
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 10,
+                              ),
+                              Text(
+                                "No #1 Delicious Paratha in Bangalore",
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w400, fontSize: 16),
+                              ),
+                              Text(
+                                "GRAND DESI PARATHA",
+                                style: GoogleFonts.poppins(
+                                    fontWeight: FontWeight.w700, fontSize: 20),
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                          SizedBox(height: 10),
+                          Row(children: <Widget>[
+                            Expanded(
+                                child: Divider(
+                                  color: Colors.redAccent,
+                                )),
+                            SizedBox(width: 5,),
+                            Text("Log-In "),
+                            SizedBox(width: 5,),
+                            Expanded(
+                                child: Divider(
+                                  color: Colors.redAccent,
+                                )),
+                          ]),
                           Container(
-                            padding: EdgeInsets.all(16),
+                            padding: EdgeInsets.fromLTRB(16, 0, 16, 16),
                             child: Form(
                               key: _formkey,
                               child: Column(
@@ -74,103 +108,80 @@ class _LogInState extends State<LogIn> {
                                   SizedBox(
                                     height: 10.0,
                                   ),
-
-                                  SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                    child: TextFormField(
-                                      controller: controller.email,
-                                      validator: (value){
-                                        if(value==null||value.isEmpty){
-                                          return "please enter E-mail";
-                                        }
-                                        return null;
-                                      },
-                                      decoration: InputDecoration(
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(20),
-                                            borderSide:BorderSide(color: Colors.deepOrangeAccent)),
-                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)),
-                                        label: Text(
-                                          'Email',
-                                          style: TextStyle(
-                                            color: Colors.black45,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        prefixIcon: Icon(Icons.email_outlined),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20.0,
-                                  ),
-                                  SizedBox(
-                                    height: 50,
-                                    child: TextFormField(
-
-                                      controller: controller.password,
-                                      validator: (value){
-                                        if(value==null||value.isEmpty){
-                                          return "please enter Password";
-                                        }
-                                        return null;
-                                      },
-                                      obscureText: true,
-                                      decoration: InputDecoration(
-                                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(20)
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                            borderRadius: BorderRadius.circular(20),
-                                            borderSide:BorderSide(color: Colors.deepOrangeAccent)),
-                                        label: Text(
-                                          'Password',
-                                          style: TextStyle(
-                                            color: Colors.black45,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        prefixIcon: Icon(Icons.fingerprint_outlined),
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    height: 20,
-                                  ),
-                                  GestureDetector(
-                                    onTap: (){
-                                      if(controller.email.text=="admin@gmail.com"&&controller.password.text=="123123"){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=>AdminOrdersScreen()));
+                                  TextFormField(
+                                    controller: controller.email,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Please enter E-mail";
                                       }
-                                      else{
-                                        SignUpController.instance.loginUser(
-                                            controller.email.text.trim(),
-                                            controller.password.text.trim());
-                                      }
+                                      return null;
                                     },
-                                    child: Material(
-                                      elevation: 5.0,
-                                      borderRadius: BorderRadius.circular(20),
-                                      child: Container(
-                                        padding:
-                                        EdgeInsets.symmetric(vertical: 8.0),
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: Color(0xffff5722),
-                                          borderRadius: BorderRadius.circular(20),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'LOGIN',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 18.0,
-                                                fontFamily: 'Poppins'),
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(vertical: 6),
+                                      labelText: 'Email',
+                                      prefixIcon: Icon(Icons.email_outlined),
+                                      border: OutlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.redAccent),
+                                      ),
+                                    ),
+                                  ),
+                                  SizedBox(
+                                    height: 10.0,
+                                  ),
+                                  TextFormField(
+                                    controller: controller.password,
+                                    validator: (value) {
+                                      if (value == null || value.isEmpty) {
+                                        return "Please enter Password";
+                                      }
+                                      return null;
+                                    },
+                                    obscureText: true,
+                                    decoration: InputDecoration(
+                                      contentPadding: EdgeInsets.symmetric(vertical: 6),
+                                      labelText: 'Password',
+                                      prefixIcon: Icon(Icons.fingerprint_outlined),
+                                      border: OutlineInputBorder(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(color: Colors.redAccent),
+                                      ),
+                                    ),
+                                  ),
+                                  Align(
+                                    alignment: Alignment.centerRight,
+                                    child: TextButton(
+                                        onPressed: () {
+                                          Get.offAll(ForgotPassword(),transition: Transition.zoom,duration: Duration(milliseconds: 600));
+                                        },
+                                        child: Text(
+                                          "Forgot Password ?",
+                                          style: TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.redAccent,
                                           ),
-                                        ),
+                                        )),
+                                  ),
+                                  SizedBox(
+                                    width: double.infinity,
+                                    child: ElevatedButton(
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.redAccent,
+                                        shape: RoundedRectangleBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(5)),
+                                      ),
+                                      onPressed: () {
+                                        if (_formkey.currentState!.validate()) {
+                                          SignUpController.instance.loginUser(
+                                              controller.email.text.trim(),
+                                              controller.password.text.trim());
+                                        }
+                                      },
+                                      child: Text(
+                                        "LOGIN",
+                                        style: TextStyle(color: Colors.white),
                                       ),
                                     ),
                                   ),
@@ -178,33 +189,49 @@ class _LogInState extends State<LogIn> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
+
                           GestureDetector(
                               onTap: () {
-                                Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => SignUp()));
+                                Get.offAll(SignUp(),transition: Transition.zoom,duration: Duration(milliseconds: 600));
+                                // Navigator.pushReplacement(
+                                //   context,
+                                //   PageRouteBuilder(
+                                //     transitionDuration:
+                                //         Duration(milliseconds: 1000),
+                                //     // Set duration here
+                                //     pageBuilder: (_, __, ___) => SignUp(),
+                                //     transitionsBuilder:
+                                //         (_, animation, __, child) {
+                                //       return SlideTransition(
+                                //         position: Tween<Offset>(
+                                //           begin: Offset(1.0, 0.0),
+                                //           end: Offset.zero,
+                                //         ).animate(CurvedAnimation(
+                                //           parent: animation,
+                                //           curve: Curves
+                                //               .linear, // Set your preferred curve here
+                                //         )),
+                                //         child: child,
+                                //       );
+                                //     },
+                                //   ),
+                                // );
                               },
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     "Don\'t have a account ? ",
-                                    style:TextStyle(
-                                        fontSize:18,
-                                        fontWeight: FontWeight.bold
-                                    ),
+                                    style: TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     "Sign-Up",
-                                    style:TextStyle(
-                                      color: Colors.deepOrange,
-                                        fontSize:18,
-                                        fontWeight: FontWeight.bold
-                                    ),
+                                    style: TextStyle(
+                                        color: Colors.redAccent,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                 ],
                               ))

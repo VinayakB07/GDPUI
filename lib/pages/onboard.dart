@@ -3,8 +3,10 @@ import 'dart:async';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:food_app/pages/welcome_screen.dart';
-import 'package:lottie/lottie.dart';
+import 'package:food_app/pages/login.dart';
+import 'package:get/get.dart';
+
+
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({Key? key}) : super(key: key);
@@ -52,6 +54,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     var screenSize = MediaQuery.of(context).size;
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         actions: [
           Container(
@@ -63,10 +66,27 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 shape:RoundedRectangleBorder(borderRadius: BorderRadius.circular(5))
               ),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => welcome()),
-                );
+                Get.offAll(LogIn(),transition: Transition.zoom,duration: Duration(milliseconds: 1200));
+                // Navigator.push(
+                //   context,
+                //   PageRouteBuilder(
+                //     transitionDuration: Duration(milliseconds: 1200), // Set duration here
+                //     pageBuilder: (_, __, ___) => LogIn(),
+                //     transitionsBuilder: (_, animation, __, child) {
+                //       return  SlideTransition(
+                //         position: Tween<Offset>(
+                //           begin: Offset(1.0, 0.0),
+                //           end: Offset.zero,
+                //         ).animate(CurvedAnimation(
+                //           parent: animation,
+                //           curve: Curves.linear, // Set your preferred curve here
+                //         )),
+                //         child: child,
+                //
+                //       );
+                //     },
+                //   ),
+                // );
               },
               child: Text("Next", style: TextStyle(color: Colors.white)),
             ),
@@ -186,17 +206,17 @@ class OnboardingModel {
 List<OnboardingModel> tabs = [
   OnboardingModel(
     'assets/screen1.gif',
-    'Choose A Tasty',
+    'Taste on Demand',
     'When you order Eat Street, \nwe\'ll hook you up with exclusive \ncoupons.',
   ),
   OnboardingModel(
     'assets/screen2.gif',
-    'Discover Places',
+    'Simplified Satisfaction',
     'We make it simple to find the \nfood you crave. Enter your \naddress and let',
   ),
   OnboardingModel(
     'assets/screen3.gif',
-    'Pick Up Or',
+    'On your fingertips',
     'We make food ordering fast, \nsimple, and free - no matter if you \norder',
   ),
 ];
