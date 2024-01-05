@@ -117,8 +117,8 @@ class _SignUpState extends State<SignUp> {
                                   TextFormField(
                                     controller: controller.email,
                                     validator: (value) {
-                                      if (value == null || value.isEmpty) {
-                                        return "Please enter E-mail";
+                                      if (value == null || value.isEmpty || !value.endsWith("@gmail.com")) {
+                                        return "Please enter valid E-mail";
                                       }
                                       return null;
                                     },
@@ -185,12 +185,14 @@ class _SignUpState extends State<SignUp> {
                                       ),
                                       onPressed: () {
                                         if (_formKey.currentState!.validate()) {
-                                          SignUpController.instance.registerUser(
-                                            controller.email.text.trim(),
-                                            controller.password.text.trim(),
-                                            controller.fullname.text,
-                                            controller.phone.text.trim(),
-                                          );
+                                              SignUpController.instance
+                                                .registerUser(
+                                              controller.email.text.trim(),
+                                              controller.password.text.trim(),
+                                              controller.fullname.text,
+                                              controller.phone.text.trim(),
+                                            );
+
                                         }
                                       },
                                       child: Text(

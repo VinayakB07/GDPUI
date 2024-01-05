@@ -1,13 +1,9 @@
-
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:food_app/pages/admin.dart';
 import 'package:food_app/pages/bottomnav.dart';
 import 'package:food_app/pages/login.dart';
-import 'package:food_app/pages/new_menu.dart';
-import 'package:food_app/pages/splash_screen.dart';
-
+import 'package:food_app/pages/menuselection.dart';
 import 'package:get/get.dart';
 import 'exception/signup_email_authentication_failure.dart';
 
@@ -39,7 +35,7 @@ class AuthentiactionRepository extends GetxController{
       }
     } else {
       // Handle null user scenario
-      Get.offAll(()=> SplashScreen());
+      Get.offAll(()=> MenuHome());
 
     }
   }
@@ -47,6 +43,7 @@ class AuthentiactionRepository extends GetxController{
 
   Future<void> cerateUserWithEmailAndPassword(String email,String password,String name,String phone)async{
     try{
+
       UserCredential result=await _auth.createUserWithEmailAndPassword(email: email, password: password);
       User? user=result.user;
       user?.updateDisplayName(name);

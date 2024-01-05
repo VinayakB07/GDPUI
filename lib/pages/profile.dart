@@ -104,7 +104,6 @@ class _ProfilePageState extends State<ProfilePage> {
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-
                   Center(
                     child: CircleAvatar(
                       radius: 50,
@@ -131,9 +130,9 @@ class _ProfilePageState extends State<ProfilePage> {
               ),
               SizedBox(height: 20),
               Divider(
-                color: Colors.grey,
+                color: Colors.redAccent,
                 height: 30,
-                thickness: 1,
+                thickness: 1.2,
               ),
 
                 ListTile(
@@ -154,16 +153,20 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
               ),
               SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  AuthentiactionRepository.instance.logout();
-                },
-                child: Text("Logout"),
-                style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 15,
+              Container(
+                width: double.infinity,
+                height: 50,
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5)),
+                      backgroundColor: Colors.redAccent
                   ),
+                  onPressed: () {
+                    AuthentiactionRepository.instance.logout();
+                  },
+                  child: Text("Logout",style: TextStyle(color: Colors.white),),
+
                 ),
               ),
             ],

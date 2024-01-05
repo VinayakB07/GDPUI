@@ -6,8 +6,8 @@ import 'order.dart';
 class MenuItem {
   final String name;
   final String image;
-
-  MenuItem({required this.name, required this.image});
+   int quantity;
+  MenuItem({required this.name, required this.image,this.quantity=0});
 }
 
 class Menupage extends StatefulWidget {
@@ -106,7 +106,7 @@ class _MenupageState extends State<Menupage> {
     ],
     'Dinner': [
       MenuItem(
-          name: 'phulkha(3pcs) with curry',
+          name: 'phulkha(3pcs)\nwith curry',
           image:
               'https://as2.ftcdn.net/v2/jpg/01/15/45/43/1000_F_115454319_6SlLY58SwqRdx4o8vqvTHA9nTJ5l6ss2.jpg'),
       MenuItem(
@@ -121,7 +121,7 @@ class _MenupageState extends State<Menupage> {
           image:
               'https://simmertoslimmer.com/wp-content/uploads/2022/11/Onion-paratha.jpg'),
       MenuItem(
-          name: 'Chapathi(3pcs) with Curry',
+          name: 'Chapathi(3pcs)\nwith Curry',
           image:
               'https://www.shutterstock.com/image-photo/vegetarian-indian-thali-home-food-600nw-1939889272.jpg'),
       MenuItem(
@@ -158,7 +158,7 @@ class _MenupageState extends State<Menupage> {
           image:
               'https://indianvegrecipe.com/wp-content/uploads/2019/10/paratha-recipe-2.jpg'),
       MenuItem(
-          name: 'phulkha(3pcs) with curry',
+          name: 'phulkha(3pcs)\nwith curry',
           image:
               'https://as2.ftcdn.net/v2/jpg/01/15/45/43/1000_F_115454319_6SlLY58SwqRdx4o8vqvTHA9nTJ5l6ss2.jpg'),
       MenuItem(
@@ -173,7 +173,7 @@ class _MenupageState extends State<Menupage> {
           image:
               'https://simmertoslimmer.com/wp-content/uploads/2022/11/Onion-paratha.jpg'),
       MenuItem(
-          name: 'Chapathi(3pcs) with Curry',
+          name: 'Chapathi(3pcs)\nwith Curry',
           image:
               'https://www.shutterstock.com/image-photo/vegetarian-indian-thali-home-food-600nw-1939889272.jpg'),
       MenuItem(
@@ -213,7 +213,7 @@ class _MenupageState extends State<Menupage> {
   String currentMenu = ''; // Store the currently selected menu
   List<MenuItem> items = []; // Initialize the items list
   List<MenuItem> cartItems = [];
-
+  int quantity = 0;
   @override
   void initState() {
     super.initState();
@@ -225,7 +225,14 @@ class _MenupageState extends State<Menupage> {
 
   void addToCart(MenuItem carti) {
     setState(() {
+      carti.quantity++;
       cartItems.add(carti);
+    });
+  }
+  void removeFromCart(MenuItem carti) {
+    setState(() {
+      carti.quantity--;
+      cartItems.remove(carti);
     });
   }
 
@@ -260,99 +267,205 @@ class _MenupageState extends State<Menupage> {
         title: Text("Back"),
       ),
       body: SingleChildScrollView(
-
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.only(left: 25,right: 25,bottom: 20),
+                padding: const EdgeInsets.only(left: 25, right: 25, bottom: 20),
                 child: Container(
-
-                width: double.infinity,
+                  width: double.infinity,
                   height: 120,
                   decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage(widget.headImage),fit: BoxFit.cover),
-                    borderRadius: BorderRadius.circular(10)
-                  ),
+                      image: DecorationImage(
+                          image: AssetImage(widget.headImage),
+                          fit: BoxFit.cover),
+                      borderRadius: BorderRadius.circular(10)),
                 ),
               ),
               Center(
-                child: Text(widget.selectedMenu,style:GoogleFonts.montserrat(
-                  fontSize: 24,
-                  fontWeight: FontWeight.w800,
-                  height: 0.03,
-                  letterSpacing: 0.02,
-                ),),
+                child: Text(
+                  widget.selectedMenu,
+                  style: GoogleFonts.montserrat(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w800,
+                    height: 0.03,
+                    letterSpacing: 0.02,
+                  ),
+                ),
               ),
               SizedBox(height: 20),
               Container(
-                padding: EdgeInsets.only(left: 20,right: 20),
+                padding: EdgeInsets.only(left: 20, right: 20),
                 child: Row(children: <Widget>[
                   Expanded(
                       child: Divider(
-                        color: Colors.redAccent,
-                      )),
-                  SizedBox(width: 5,),
-                  Text("MENU",style: TextStyle(
-                    fontSize: 15,
-                    letterSpacing: 1.5
-                  ),),
-                  SizedBox(width: 5,),
+                    color: Colors.redAccent,
+                  )),
+                  SizedBox(
+                    width: 5,
+                  ),
+                  Text(
+                    "EXPLORE",
+                    style: TextStyle(fontSize: 15, letterSpacing: 1.5),
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
                   Expanded(
                       child: Divider(
-                        color: Colors.redAccent,
-                      )),
+                    color: Colors.redAccent,
+                  )),
                 ]),
               ),
               SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.only(left: 20,right: 20),
+                padding: EdgeInsets.only(left: 20, right: 20),
                 child: Column(
-
                   children: items.map((item) {
-                    return  Card(
-                      color: Colors.white,
-                      elevation: 3.0,
-                      shadowColor: Colors.black,
-                      margin: EdgeInsets.symmetric(vertical: 6.0),
-                      child: ListTile(
-                        leading: CircleAvatar(
-                          backgroundImage: NetworkImage(item.image),
-                        ),
-                        title: Text(
-                          item.name,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        trailing: IconButton(
-                          icon: Icon(Icons.add_outlined,color: Colors.redAccent,size: 25,),
-                          onPressed: () {
-                            if (cartItems.length >= 2) {
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
-                                SnackBar(
-                                  content:
-                                  Text('Reached Maximum Limit'),
-                                  duration: Duration(seconds: 2),
+                    return Column(
+                      children: [
+                        Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              boxShadow: [BoxShadow(blurRadius: 1.3)]),
+                          child: Row(
+                            
+                            children: [
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Container(
+                                height: 60,
+                                width: 60,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(5),
+                                    image: DecorationImage(
+                                        image: NetworkImage(item.image),
+                                        fit: BoxFit.cover)),
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      item.name,
+                                      style: TextStyle(
+                                          fontSize: 16, fontWeight: FontWeight.w400),
+                                    ),
+                                    Container(
+                                      height: 28,
+                                      padding: EdgeInsets.only(right: 10),
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                                color: Colors.red[100],
+                                                borderRadius: BorderRadius.only(
+                                                    topLeft: Radius.circular(10),
+                                                    bottomLeft: Radius.circular(10)
+                                                ),
+                                                boxShadow: [BoxShadow(blurRadius: 1)]
+                                            ),
+                                            child: IconButton(
+                                                onPressed: () {
+                                                  if (cartItems.length == 0) {
+                                                    ScaffoldMessenger.of(context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                            'No item to delete'),
+                                                        duration: Duration(seconds: 2),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    removeFromCart(item);
+                                                    ScaffoldMessenger.of(context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                            '${item.name} removed from cart'),
+                                                        duration: Duration(seconds: 2),
+                                                      ),
+                                                    );
+                                                  }
+                                                },
+                                                icon: Icon(Icons.remove),
+                                                iconSize: 15),
+                                          ),
+                                          Container(
+
+                                            decoration: BoxDecoration(
+                                                color: Colors.white,
+                                            boxShadow: [BoxShadow(blurRadius: 1)]
+                                            ),
+                                            height: 28,
+                                            width: 20,
+                                            child: Center(child: Text("${item.quantity}")),
+                                          ),
+                                          Container(
+                                            height: 30,
+                                            width: 30,
+                                            decoration: BoxDecoration(
+                                              color: Colors.red,
+                                              borderRadius: BorderRadius.only(
+                                                topRight: Radius.circular(10),
+                                                bottomRight: Radius.circular(10)
+
+                                              ),
+                                                boxShadow: [BoxShadow(blurRadius: 1)]
+                                            ),
+                                            child: IconButton(
+                                              onPressed: () {
+                                                if (cartItems.length >= 2) {
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                          'Reached Maximum Limit'),
+                                                      duration: Duration(seconds: 2),
+                                                    ),
+                                                  );
+                                                } else {
+                                                  addToCart(item);
+                                                  ScaffoldMessenger.of(context)
+                                                      .showSnackBar(
+                                                    SnackBar(
+                                                      content: Text(
+                                                          '${item.name} added to cart'),
+                                                      duration: Duration(seconds: 2),
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                              icon: Icon(Icons.add),
+                                              iconSize: 15,
+                                              color: Colors.white,
+                                            ),
+                                          ),
+                                          SizedBox(width: 10,)
+                                        ],
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              );
-                            } else {
-                              addToCart(item);
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                      '${item.name} added to cart'),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            }
-                          },
+                              ),
+
+                            ],
+                          ),
                         ),
-                      ),
+                        SizedBox(
+                          height: 15,
+                        )
+                      ],
                     );
-
-
                   }).toList(),
                 ),
               ),

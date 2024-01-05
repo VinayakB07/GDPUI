@@ -67,26 +67,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               ),
               onPressed: () {
                 Get.offAll(LogIn(),transition: Transition.zoom,duration: Duration(milliseconds: 1200));
-                // Navigator.push(
-                //   context,
-                //   PageRouteBuilder(
-                //     transitionDuration: Duration(milliseconds: 1200), // Set duration here
-                //     pageBuilder: (_, __, ___) => LogIn(),
-                //     transitionsBuilder: (_, animation, __, child) {
-                //       return  SlideTransition(
-                //         position: Tween<Offset>(
-                //           begin: Offset(1.0, 0.0),
-                //           end: Offset.zero,
-                //         ).animate(CurvedAnimation(
-                //           parent: animation,
-                //           curve: Curves.linear, // Set your preferred curve here
-                //         )),
-                //         child: child,
-                //
-                //       );
-                //     },
-                //   ),
-                // );
+
               },
               child: Text("Next", style: TextStyle(color: Colors.white)),
             ),

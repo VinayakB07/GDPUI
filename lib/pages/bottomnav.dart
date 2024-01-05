@@ -35,11 +35,7 @@ class _BottomNavState extends State<BottomNav> {
 
   @override
   Widget build(BuildContext context) {
-    void _onItemTapped(int index) {
-      setState(() {
-        currentTabIndex = index;
-      });
-    }
+
     return Scaffold(
       extendBody: true,
       bottomNavigationBar: Stack(
